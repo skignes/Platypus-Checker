@@ -1,0 +1,69 @@
+{
+    "ftrace": {
+        "build": "make",
+        "tests": [
+            {
+                "Error-Handling": [
+                    {
+                        "name": "Bad argument",
+                        "command": "./ftrace not_working",
+                        "output": "*",
+                        "return": "84"
+                    },
+                    {
+                        "name": "Correct argument",
+                        "command": "./ftrace test",
+                        "output": "*",
+                        "return": "0"
+                    }
+                ],
+                "Syscall": [
+                    {
+                        "name": "Basic Syscall",
+                        "command": "./ftrace $BINARY/write",
+                        "grep": "Syscall write(",
+                        "return": "0"
+                    },
+                    {
+                        "name": "Basic Syscall, looking for return value",
+                        "command": "./ftrace $BINARY/write",
+                        "grep": " = ",
+                        "return": "0"
+                    },
+                    {
+                        "name": "Basic Syscall, in mutltiple functions",
+                        "command": "./ftrace $BINARY/functions_write",
+                        "grep": "Syscall write(",
+                        "return": "0"
+                    }
+                ],
+                "Functions-Basics": [
+                    {
+                        "name": "Entering Function",
+                        "command": "./ftrace $BINARY/putstr_main",
+                        "grep": "Entering function my_putstr",
+                        "return": "0"
+                    },
+                    {
+                        "name": "Leaving Function",
+                        "command": "./ftrace $BINARY/putstr_main",
+                        "grep": "Leaving function my_putstr",
+                        "return": "0"
+                    },
+                    {
+                        "name": "Main Function Entering",
+                        "command": "./ftrace $BINARY/write",
+                        "grep": "Entering function main",
+                        "return": "0"
+                    },
+                    {
+                        "name": "Main Function Leaving",
+                        "command": "./ftrace $BINARY/write",
+                        "grep": "Leaving function main",
+                        "return": "0"
+                    }
+                ]
+            }
+        ]
+    }
+}
