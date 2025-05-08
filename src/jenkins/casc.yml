@@ -30,9 +30,9 @@ jenkins:
               - "Job/Move"
 
 # WARN: To disbale script security un-comment those line
-security:
-  globalJobDslSecurityConfiguration:
-    useScriptSecurity: false
+# security:
+#   globalJobDslSecurityConfiguration:
+#     useScriptSecurity: false
 
 appearance:
   themeManager:

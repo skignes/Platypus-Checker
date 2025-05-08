@@ -106,7 +106,6 @@ def junitReport(tests, file):
 
             failure_element.set('message', failure_message)
 
-    # Wrap testsuite in testsuites element (Jenkins compatibility)
     testsuites = ET.Element('testsuites')
     testsuites.append(testsuite)
 
@@ -150,11 +149,10 @@ def execCmd(cmd, path, log_file=None):
 
 def buildExercise(repo, exercise_name, exercise_config, log_dir):
     build_cmd = exercise_config['build']
-    # Assume expected build return code is 0 if not provided
     expected_code = int(exercise_config.get('return_code', 0))
 
     print(f"\n=== Building {exercise_name} ===")
-    log_file = f"{log_dir}/{exercise_name}_build.log"
+    log_file = f"{log_dir}/build.log"
     result = execCmd(build_cmd, repo, log_file)
 
     build_passed = result['returncode'] == expected_code
@@ -184,24 +182,24 @@ def runExerciseTests(repo, tests, exercise_name, tests_config, log_dir):
             print(f"[ERROR] - Skipping test {test_name}, no command specified")
             continue
 
-        # Get expected output or grep pattern.
         expected_output = test_info.get('output')
         grep_value = test_info.get('grep')
-        expected_code = int(test_info.get('return', '0'))
+        expected_code = int(test_info.get('return', 0))
+        std_type = test_info.get('std', 'stdout')
 
-        log_file = f"{log_dir}/{exercise_name}_{test_name}.log"
+        log_file = f"{log_dir}/{test_name}.log"
         result = execCmd(command, repo, log_file)
 
-        # Check output: either an exact match is required or a grep is used.
+        output_to_check = result.get(std_type, "")
+
         if expected_output is not None:
             if expected_output == "*":
                 output_match = True
             else:
-                output_match = result['stdout'] == expected_output
+                output_match = output_to_check == expected_output
         elif grep_value is not None:
-            output_match = grep_value in result['stdout']
+            output_match = grep_value in output_to_check
         else:
-            # If neither is given, accept any output.
             output_match = True
 
         return_code_match = result['returncode'] == expected_code
@@ -230,8 +228,8 @@ def runExerciseTests(repo, tests, exercise_name, tests_config, log_dir):
                 print(f"    Return code mismatch: expected {expected_code}, got {result['returncode']}")
             if not output_match and expected_output is not None and expected_output != "*":
                 print("    Output mismatch:")
-                print(f"      Expected: '{repr(expected_output)}'")
-                print(f"      Got:      '{repr(result['stdout'])}'")
+                print(f"      Expected (from {std_type}): '{repr(expected_output)}'")
+                print(f"      Got (from {std_type}):      '{repr(output_to_check)}'")
 
     return tests
 
@@ -259,8 +257,6 @@ def main():
 
         build = buildExercise(args.repo, name, exercise_config, args.log)
 
-        # Flatten tests from the new JSON structure.
-        # Each exercise_config["tests"] is a list containing one object grouping tests per category.
         flattened_tests = []
         for tests_group in exercise_config.get('tests', []):
             if isinstance(tests_group, dict):

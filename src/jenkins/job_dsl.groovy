@@ -15,12 +15,7 @@ job('Seed') {
             text('''
                 def username = GITHUB_NAME.split('/')[0]
 
-                folder("PSU/${username}") {
-                    displayName("${username}")
-                    description("Tests for ${username}")
-                }
-
-                job("PSU/${username}/${DISPLAY_NAME}") {
+                job("PSU/${DISPLAY_NAME}") {
                     properties {
                         githubProjectUrl("https://github.com/${GITHUB_NAME}")
                     }
