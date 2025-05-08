@@ -18,6 +18,16 @@ jenkins:
             description: "Me :)"
             permissions:
               - "Overall/Administer"
+          - entries:
+            name: "Tek"
+            pattern: ".*"
+            description: "Regular Tek"
+            permissions:
+              - "Overall/Read"
+              - "Job/Build"
+              - "Job/Workspace"
+              - "Job/Read"
+              - "Job/Move"
 
 # WARN: To disbale script security un-comment those line
 security:
