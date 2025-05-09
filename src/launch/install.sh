@@ -92,6 +92,7 @@ if [ "$ACTION" == "--install" ]; then
 
     echo -e "[${BLUE}INFO${NC}] Starting the container"
     docker run -d                                                               \
+        --restart unless-stopped                                                \
         --name ${CONTAINER_NAME}                                                \
         -p ${HOST_PORT}:${JENKINS_PORT}                                         \
         -v $(realpath ${CONFIG_FILE}):/var/jenkins_home/casc_configs/casc.yaml  \
@@ -126,6 +127,31 @@ if [ "$ACTION" == "--start" ]; then
         exit 1
     else
         echo -e "[${GREEN}OK${NC}] Container ${CONTAINER_NAME} started."
+        echo -e "[${BLUE}INFO${NC}] Access at ${YELLOW}${BOLD}http://${HOST_IP}:${HOST_PORT}${NC}"
+        exit 0
+    fi
+fi
+
+# Handle --stop flag (stop container if it exists)
+if [ "$ACTION" == "--stop" ]; then
+    docker stop ${CONTAINER_NAME} > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo -e "[${RED}KO${NC}] No container named ${CONTAINER_NAME} found or it is not running."
+        exit 1
+    else
+        echo -e "[${GREEN}OK${NC}] Container ${CONTAINER_NAME} stopped."
+        exit 0
+    fi
+fi
+
+# Handle --restart flag (restart container if it exists)
+if [ "$ACTION" == "--restart" ]; then
+    docker restart ${CONTAINER_NAME} > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo -e "[${RED}KO${NC}] No container named ${CONTAINER_NAME} found. Run with --install first."
+        exit 1
+    else
+        echo -e "[${GREEN}OK${NC}] Container ${CONTAINER_NAME} restarted."
         echo -e "[${BLUE}INFO${NC}] Access at ${YELLOW}${BOLD}http://${HOST_IP}:${HOST_PORT}${NC}"
         exit 0
     fi
