@@ -20,7 +20,7 @@ MAIN_TESTER="../tester/main.py"
 JSON_FOLDER="../json/"
 
 usage() {
-    echo "Usage: $0 [--install | --start | --prune]"
+    echo "Usage: $0 [--info | --install | --start | --stop | --restart | --prune]"
     exit 1
 }
 
@@ -155,6 +155,48 @@ if [ "$ACTION" == "--restart" ]; then
         echo -e "[${BLUE}INFO${NC}] Access at ${YELLOW}${BOLD}http://${HOST_IP}:${HOST_PORT}${NC}"
         exit 0
     fi
+fi
+
+# Handle --info flag to show runtime information
+if [ "$ACTION" == "--info" ]; then
+    # Check if the container exists
+    if ! docker inspect ${CONTAINER_NAME} > /dev/null 2>&1; then
+        echo -e "[${RED}KO${NC}] No container named ${CONTAINER_NAME} found."
+        exit 1
+    fi
+
+    # Retrieve container information
+    CONTAINER_ID=$(docker inspect --format '{{.Id}}' ${CONTAINER_NAME} 2>/dev/null)
+    STATUS=$(docker inspect --format '{{.State.Status}}' ${CONTAINER_NAME} 2>/dev/null)
+    CONTAINER_IP=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${CONTAINER_NAME})
+    STARTED=$(docker inspect --format '{{.State.StartedAt}}' ${CONTAINER_NAME} 2>/dev/null)
+
+    # Compute uptime in seconds then in hours and minutes
+    if [ -n "$STARTED" ]; then
+        STARTED_TS=$(date -d "$STARTED" +%s)
+        NOW_TS=$(date +%s)
+        UPTIME_S=$(( NOW_TS - STARTED_TS ))
+        UPTIME_H=$(( UPTIME_S / 3600 ))
+        UPTIME_M=$(( (UPTIME_S % 3600) / 60 ))
+    else
+        UPTIME_H=0
+        UPTIME_M=0
+    fi
+
+    # Get resource usage stats
+    STATS=$(docker stats ${CONTAINER_NAME} --no-stream --format "CPU: {{.CPUPerc}}    Memory: {{.MemUsage}}")
+
+    echo -e "[${BLUE}INFO${NC}] -----------------------------------------------------"
+    echo -e "[${BLUE}INFO${NC}] Jenkins Runtime Information"
+    echo -e "[${BLUE}INFO${NC}] -----------------------------------------------------"
+    echo -e "[${BLUE}INFO${NC}] Container Name   : ${YELLOW}${CONTAINER_NAME}${NC}"
+    echo -e "[${BLUE}INFO${NC}] Container ID     : ${YELLOW}${CONTAINER_ID:0:12}${NC}"
+    echo -e "[${BLUE}INFO${NC}] Status           : ${YELLOW}${STATUS}${NC}"
+    echo -e "[${BLUE}INFO${NC}] Jenkins Access   : ${YELLOW}http://${HOST_IP}:${HOST_PORT}${NC}"
+    echo -e "[${BLUE}INFO${NC}] Uptime           : ${YELLOW}${UPTIME_H}h ${UPTIME_M}m${NC}"
+    echo -e "[${BLUE}INFO${NC}] Docker Stats     : ${YELLOW}${STATS}${NC}"
+    echo -e "[${BLUE}INFO${NC}] -----------------------------------------------------"
+    exit 0
 fi
 
 usage
