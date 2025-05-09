@@ -36,7 +36,7 @@ jenkins:
 
 appearance:
   themeManager:
-    disableUserThemes: true
+    disableUserThemes: false
     theme: "dark"
 # NOTE: Available option : darkSystem, dark. There is not Light so just comment this to get light.
 
