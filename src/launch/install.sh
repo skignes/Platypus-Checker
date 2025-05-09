@@ -73,6 +73,12 @@ fi
 if [ "$ACTION" == "--install" ]; then
     prune_all
 
+    # Define the persistent Jenkins home folder (adjust as needed)
+    PERSISTENT_HOME="../jenkins_home"
+    # Create it if not present and fix ownership (using UID 1000, which is common for Jenkins)
+    mkdir -p $(realpath ${PERSISTENT_HOME})
+    sudo chown -R 1000:1000 $(realpath ${PERSISTENT_HOME})
+
     echo -e "[${BLUE}INFO${NC}] Building the Docker image"
     docker build -t ${IMAGE_NAME} . > /dev/null 2>&1
     if [ $? -ne 0 ]; then
@@ -100,8 +106,9 @@ if [ "$ACTION" == "--install" ]; then
         -v $(realpath ${BINARY_FOLDER}):/opt/jenkins/binary/                    \
         -v $(realpath ${JSON_FOLDER}):/opt/jenkins/json/                        \
         -v $(realpath ${MAIN_TESTER}):/var/jenkins_home/main.py                 \
-        -e CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs                   \
+        -v $(realpath ${PERSISTENT_HOME}):/var/jenkins_home                     \
         -e USER_ADMIN_PASSWORD=admin                                            \
+        -e CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs                   \
         -e BINARY=/opt/jenkins/binary                                           \
         ${IMAGE_NAME} > /dev/null 2>&1
 
