@@ -21,6 +21,18 @@
                         "command": "./ftrace",
                         "output": "*",
                         "return": 84
+                    },
+                    {
+                        "name": "Directory as argument",
+                        "command": "./ftrace /tmp",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Non-executable file",
+                        "command": "./ftrace /etc/passwd",
+                        "output": "*",
+                        "return": 84
                     }
                 ],
                 "Syscall": [
@@ -80,6 +92,47 @@
                         "command": "./ftrace $BINARY/write",
                         "std": "stderr",
                         "grep": "Leaving function main",
+                        "return": 0
+                    }
+                ],
+                "Complex-Functions": [
+                    {
+                        "name": "Recursive function",
+                        "command": "./ftrace $BINARY/recursive",
+                        "std": "stderr",
+                        "grep": "Entering function recursive_print",
+                        "return": 0
+                    }
+                ],
+                "Signal-Handling": [
+                    {
+                        "name": "Basic signal reception",
+                        "command": "./ftrace $BINARY/signal_test",
+                        "std": "stderr",
+                        "grep": "Received signal",
+                        "return": 0
+                    },
+                    {
+                        "name": "SIGINT handling",
+                        "command": "bash -c '(./ftrace $BINARY/long_sleep & sleep 1; kill -2 $!)' ",
+                        "std": "stderr",
+                        "grep": "Received signal SIGINT",
+                        "return": 0
+                    }
+                ],
+                "Shared-Libraries": [
+                    {
+                        "name": "External function call",
+                        "command": "./ftrace $BINARY/lib_user",
+                        "std": "stderr",
+                        "grep": "Entering function.*@libc.so",
+                        "return": 0
+                    },
+                    {
+                        "name": "Dynamic library loading",
+                        "command": "./ftrace $BINARY/dlopen_test",
+                        "std": "stderr",
+                        "grep": "Syscall open",
                         "return": 0
                     }
                 ]
