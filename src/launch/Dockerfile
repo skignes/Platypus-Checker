@@ -4,7 +4,7 @@ FROM jenkins/jenkins:latest
 USER root
 
 RUN apt-get update && \
-    apt-get install -y neovim zsh build-essential && \
+    apt-get install -y neovim zsh build-essential libelf-dev && \
     apt-get clean
 
 # Don't use the Setup Wizard
