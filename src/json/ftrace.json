@@ -106,17 +106,31 @@
                 ],
                 "Signal-Handling": [
                     {
-                        "name": "Basic signal reception",
-                        "command": "./ftrace $BINARY/signal_test",
+                        "name": "Signal Reception SIGWINCH",
+                        "command": "./ftrace $BINARY/signal_sigwinch",
                         "std": "stderr",
-                        "grep": "Received signal",
+                        "grep": "Received signal SIGWINCH",
                         "return": 0
                     },
                     {
-                        "name": "SIGINT handling",
-                        "command": "bash -c '(./ftrace $BINARY/long_sleep & sleep 1; kill -2 $!)' ",
+                        "name": "Signal Reception SIGUSER1",
+                        "command": "./ftrace $BINARY/signal_sigusr1",
                         "std": "stderr",
-                        "grep": "Received signal SIGINT",
+                        "grep": "Received signal SIGUSR1",
+                        "return": 0
+                    },
+                    {
+                        "name": "Signal Reception SIGUSER2",
+                        "command": "./ftrace $BINARY/signal_sigusr2",
+                        "std": "stderr",
+                        "grep": "Received signal SIGUSR2",
+                        "return": 0
+                    },
+                    {
+                        "name": "Signal Reception SIGALRM",
+                        "command": "./ftrace $BINARY/signal_sigalrm",
+                        "std": "stderr",
+                        "grep": "Received signal SIGALRM",
                         "return": 0
                     }
                 ],
