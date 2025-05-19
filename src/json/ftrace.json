@@ -67,6 +67,13 @@
                 ],
                 "Functions-Basics": [
                     {
+                        "name": "No Function only main",
+                        "command": "./ftrace $BINARY/main",
+                        "std": "stderr",
+                        "grep": "Leaving function main",
+                        "return": 0
+                    },
+                    {
                         "name": "Entering Function",
                         "command": "./ftrace $BINARY/putstr_main",
                         "std": "stderr",
@@ -136,17 +143,45 @@
                 ],
                 "Shared-Libraries": [
                     {
-                        "name": "External function call",
-                        "command": "./ftrace $BINARY/lib_user",
+                        "name": "External function Printf",
+                        "command": "./ftrace $BINARY/printf_function",
                         "std": "stderr",
-                        "grep": "Entering function.*@libc.so",
+                        "grep": "Entering function printf",
                         "return": 0
                     },
                     {
-                        "name": "Dynamic library loading",
-                        "command": "./ftrace $BINARY/dlopen_test",
+                        "name": "External function sleep",
+                        "command": "./ftrace $BINARY/sleep_function",
                         "std": "stderr",
-                        "grep": "Syscall open",
+                        "grep": "Entering function sleep",
+                        "return": 0
+                    },
+                    {
+                        "name": "External function malloc",
+                        "command": "./ftrace $BINARY/malloc_function",
+                        "std": "stderr",
+                        "grep": "Entering function malloc",
+                        "return": 0
+                    },
+                    {
+                        "name": "External function free",
+                        "command": "./ftrace $BINARY/free_function",
+                        "std": "stderr",
+                        "grep": "Entering function free",
+                        "return": 0
+                    },
+                    {
+                        "name": "External function fopen",
+                        "command": "./ftrace $BINARY/fopen_function",
+                        "std": "stderr",
+                        "grep": "Entering function fopen",
+                        "return": 0
+                    },
+                    {
+                        "name": "External function strncpy",
+                        "command": "./ftrace $BINARY/strncpy_function",
+                        "std": "stderr",
+                        "grep": "Entering function strncpy",
                         "return": 0
                     }
                 ]
