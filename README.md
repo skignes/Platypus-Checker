@@ -64,6 +64,16 @@ Now for each job in the settings of the build you can select the `credentials` t
 
 You can build your private project now.
 
+### Accept the script
+
+I put a script protection to not execute everything i don't want on this jenkins.
+
+So to be able to continue to the next step you need to accept the `seed` job script.
+
+To do so you need to go into the [settings](http://localhost:8080/manage/scriptApproval/) and you will get a **Approve** and a **Deny**. I suggest you approve but this is up to you.
+
+![Accept the Script](img/script.jpg)
+
 ### Run the job
 
 So to run the job you first need to **seed** it. To do so you need to go into the seed job at the root of the jenkins.

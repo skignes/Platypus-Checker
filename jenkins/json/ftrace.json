@@ -61,7 +61,7 @@
                         "name": "Basic Syscall, in functions, looking for return value",
                         "command": "./ftrace $BINARY/ftrace/putstr_main",
                         "std": "stderr",
-                        "grep": " = 0x3",
+                        "grep": " = 0xf",
                         "return": 0
                     }
                 ],
@@ -165,7 +165,7 @@
                     },
                     {
                         "name": "External function free",
-                        "command": "./ftrace $BINARY/ftrace/free_function",
+                        "command": "./ftrace $BINARY/ftrace/malloc_function",
                         "std": "stderr",
                         "grep": "Entering function free",
                         "return": 0
