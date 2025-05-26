@@ -1,0 +1,22 @@
+services:
+  jenkins:
+    container_name: jenkins-platypus
+    build: jenkins/
+    image: jenkins:jcasc
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - jenkins-platypus-data:/var/jenkins_home
+    environment:
+      CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs"
+      USER_ADMIN_PASSWORD: "admin"
+      BINARY: "/opt/jenkins/binary"
+      JSON: "/opt/jenkins/json"
+    entrypoint:
+      - "/usr/bin/tini"
+      - "--"
+      - "/usr/local/bin/jenkins.sh"
+
+volumes:
+  jenkins-platypus-data: {}

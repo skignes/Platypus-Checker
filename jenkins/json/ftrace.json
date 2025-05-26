@@ -12,7 +12,7 @@
                     },
                     {
                         "name": "Correct argument",
-                        "command": "./ftrace $BINARY/write",
+                        "command": "./ftrace $BINARY/ftrace/write",
                         "output": "*",
                         "return": 0
                     },
@@ -38,28 +38,28 @@
                 "Syscall": [
                     {
                         "name": "Basic Syscall",
-                        "command": "./ftrace $BINARY/write",
+                        "command": "./ftrace $BINARY/ftrace/write",
                         "std": "stderr",
                         "grep": "Syscall write(0x1",
                         "return": 0
                     },
                     {
                         "name": "Basic Syscall, looking for return value",
-                        "command": "./ftrace $BINARY/write",
+                        "command": "./ftrace $BINARY/ftrace/write",
                         "std": "stderr",
                         "grep": " = 0xd",
                         "return": 0
                     },
                     {
                         "name": "Basic Syscall, in functions",
-                        "command": "./ftrace $BINARY/putstr_main",
+                        "command": "./ftrace $BINARY/ftrace/putstr_main",
                         "std": "stderr",
                         "grep": "Syscall write(0x1",
                         "return": 0
                     },
                     {
                         "name": "Basic Syscall, in functions, looking for return value",
-                        "command": "./ftrace $BINARY/putstr_main",
+                        "command": "./ftrace $BINARY/ftrace/putstr_main",
                         "std": "stderr",
                         "grep": " = 0x3",
                         "return": 0
@@ -68,35 +68,35 @@
                 "Functions-Basics": [
                     {
                         "name": "No Function only main",
-                        "command": "./ftrace $BINARY/main",
+                        "command": "./ftrace $BINARY/ftrace/main",
                         "std": "stderr",
                         "grep": "Leaving function main",
                         "return": 0
                     },
                     {
                         "name": "Entering Function",
-                        "command": "./ftrace $BINARY/putstr_main",
+                        "command": "./ftrace $BINARY/ftrace/putstr_main",
                         "std": "stderr",
                         "grep": "Entering function my_putstr",
                         "return": 0
                     },
                     {
                         "name": "Leaving Function",
-                        "command": "./ftrace $BINARY/putstr_main",
+                        "command": "./ftrace $BINARY/ftrace/putstr_main",
                         "std": "stderr",
                         "grep": "Leaving function my_putstr",
                         "return": 0
                     },
                     {
                         "name": "Main Function Entering",
-                        "command": "./ftrace $BINARY/write",
+                        "command": "./ftrace $BINARY/ftrace/write",
                         "std": "stderr",
                         "grep": "Entering function main",
                         "return": 0
                     },
                     {
                         "name": "Main Function Leaving",
-                        "command": "./ftrace $BINARY/write",
+                        "command": "./ftrace $BINARY/ftrace/write",
                         "std": "stderr",
                         "grep": "Leaving function main",
                         "return": 0
@@ -105,7 +105,7 @@
                 "Complex-Functions": [
                     {
                         "name": "Recursive function",
-                        "command": "./ftrace $BINARY/recursive",
+                        "command": "./ftrace $BINARY/ftrace/recursive",
                         "std": "stderr",
                         "grep": "Entering function recursive_print",
                         "return": 0
@@ -114,28 +114,28 @@
                 "Signal-Handling": [
                     {
                         "name": "Signal Reception SIGWINCH",
-                        "command": "./ftrace $BINARY/signal_sigwinch",
+                        "command": "./ftrace $BINARY/ftrace/signal_sigwinch",
                         "std": "stderr",
                         "grep": "Received signal SIGWINCH",
                         "return": 0
                     },
                     {
                         "name": "Signal Reception SIGUSER1",
-                        "command": "./ftrace $BINARY/signal_sigusr1",
+                        "command": "./ftrace $BINARY/ftrace/signal_sigusr1",
                         "std": "stderr",
                         "grep": "Received signal SIGUSR1",
                         "return": 0
                     },
                     {
                         "name": "Signal Reception SIGUSER2",
-                        "command": "./ftrace $BINARY/signal_sigusr2",
+                        "command": "./ftrace $BINARY/ftrace/signal_sigusr2",
                         "std": "stderr",
                         "grep": "Received signal SIGUSR2",
                         "return": 0
                     },
                     {
                         "name": "Signal Reception SIGALRM",
-                        "command": "./ftrace $BINARY/signal_sigalrm",
+                        "command": "./ftrace $BINARY/ftrace/signal_sigalrm",
                         "std": "stderr",
                         "grep": "Received signal SIGALRM",
                         "return": 0
@@ -144,42 +144,42 @@
                 "Shared-Libraries": [
                     {
                         "name": "External function Printf",
-                        "command": "./ftrace $BINARY/printf_function",
+                        "command": "./ftrace $BINARY/ftrace/printf_function",
                         "std": "stderr",
                         "grep": "Entering function printf",
                         "return": 0
                     },
                     {
                         "name": "External function sleep",
-                        "command": "./ftrace $BINARY/sleep_function",
+                        "command": "./ftrace $BINARY/ftrace/sleep_function",
                         "std": "stderr",
                         "grep": "Entering function sleep",
                         "return": 0
                     },
                     {
                         "name": "External function malloc",
-                        "command": "./ftrace $BINARY/malloc_function",
+                        "command": "./ftrace $BINARY/ftrace/malloc_function",
                         "std": "stderr",
                         "grep": "Entering function malloc",
                         "return": 0
                     },
                     {
                         "name": "External function free",
-                        "command": "./ftrace $BINARY/free_function",
+                        "command": "./ftrace $BINARY/ftrace/free_function",
                         "std": "stderr",
                         "grep": "Entering function free",
                         "return": 0
                     },
                     {
                         "name": "External function fopen",
-                        "command": "./ftrace $BINARY/fopen_function",
+                        "command": "./ftrace $BINARY/ftrace/fopen_function",
                         "std": "stderr",
                         "grep": "Entering function fopen",
                         "return": 0
                     },
                     {
                         "name": "External function strncpy",
-                        "command": "./ftrace $BINARY/strncpy_function",
+                        "command": "./ftrace $BINARY/ftrace/strncpy_function",
                         "std": "stderr",
                         "grep": "Entering function strncpy",
                         "return": 0

@@ -10,6 +10,10 @@ RUN apt-get update && \
 # Don't use the Setup Wizard
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
+ENV TZ=Europe/Paris
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN rm -rf /var/jenkins_home/plugins/*
 
 # Install Plugins
@@ -31,6 +35,27 @@ RUN jenkins-plugin-cli --plugins    \
     echarts-api:latest              \
     pipeline-stage-view:latest      \
     dashboard-view:latest           \
-    test-results-analyzer:latest
+    test-results-analyzer:latest    \
+    cors-filter:latest
 
 USER jenkins
+
+# Config File
+COPY jenkins/casc.yml		\
+	 /var/jenkins_home/casc_configs/casc.yaml
+
+# Groovy File
+COPY jenkins/job_dsl.groovy	\
+	 /var/jenkins_home/job_dsl.groovy
+
+# Binary Folder
+COPY binary/		\
+	 /opt/jenkins/binary/
+
+# Json Folder
+COPY json/			\
+	 /opt/jenkins/json/
+
+# Main file
+COPY tester/main.py		\
+	 /var/jenkins_home/main.py
