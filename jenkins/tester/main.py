@@ -82,6 +82,12 @@ def junitReport(tests, file):
         testcase.set('classname', 'FunctionalTests')
         testcase.set('time', str(functional_test.get('time', 0)))
 
+        if functional_test.get('actual_code') == 124:
+            failure_element = ET.SubElement(testcase, 'failure')
+            failure_element.set('type', 'Timeout')
+            failure_element.set('message', 'Test timed out')
+            continue
+
         if functional_test['result'] == 'skipped':
             skip = ET.SubElement(testcase, 'skipped')
             if 'skip_reason' in functional_test:
@@ -118,6 +124,8 @@ def junitReport(tests, file):
 def execCmd(cmd, path, log_file=None):
     print(f"[INFO] - Running command: {cmd}")
     start_time = time.time()
+
+    cmd = f"timeout 10 {cmd}"
 
     process = subprocess.Popen(
         cmd,
