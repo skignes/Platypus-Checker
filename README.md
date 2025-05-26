@@ -76,6 +76,9 @@ To do so you need to go into the [settings](http://localhost:8080/manage/scriptA
 
 ### Run the job
 
+> [!IMPORTANT]
+> The job will only run on the branch named `main`
+
 So to run the job you first need to **seed** it. To do so you need to go into the seed job at the root of the jenkins.
 You can build it with the name you want for the new job (the one the check will be done on).
 Then You can find this job in the `PSU` directory (because it is the default one) but this can be change.

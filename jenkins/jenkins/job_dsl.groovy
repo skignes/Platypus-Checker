@@ -26,6 +26,7 @@ job('Seed') {
                                 url("git@github.com:${GITHUB_NAME}.git")
                                 credentials("your-credential-id")
                             }
+							branch('*/main')
                             extensions {
                                 relativeTargetDirectory('repository')
                             }
