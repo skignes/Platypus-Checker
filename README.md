@@ -8,6 +8,8 @@ Platypus Checker is a complete **Jenkins** setup designed to automate the proces
 - [Setup](#setup)
 - [Usage](#usage)
 - [Build With](#build-with)
+- [Contributors](#contributors)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Prerequisites
