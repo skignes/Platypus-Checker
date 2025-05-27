@@ -1,4 +1,14 @@
 services:
+  frontend:
+    container_name: "frontend"
+    build: frontend/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - jenkins
+    environment:
+      JENKINS_URL: "http://jenkins:8080"
+
   jenkins:
     container_name: jenkins-platypus
     build: jenkins/
