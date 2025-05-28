@@ -1,0 +1,89 @@
+{
+    "plazza": {
+        "build": "make",
+        "tests": [
+            {
+                "Error-Handling": [
+                    {
+                        "name": "Bad argument",
+                        "command": "./plazza not_working",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing arguments",
+                        "command": "./plazza",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Non-numeric multiplier",
+                        "command": "./plazza foo 5 2000",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Non-numeric cooks",
+                        "command": "./plazza 2 bar 2000",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Non-numeric refill",
+                        "command": "./plazza 2 5 baz",
+                        "output": "*",
+                        "return": 84
+                    }
+                ],
+                "Basic-Usage": [
+                    {
+                        "name": "Help or Usage",
+                        "command": "./plazza --help",
+                        "output": "*",
+                        "return": 0
+                    },
+                    {
+                        "name": "Start and exit",
+                        "command": "echo 'exit' | ./plazza 2 5 2000",
+                        "grep": "",
+                        "return": 0
+                    }
+                ],
+                "Order-Parsing": [
+                    {
+                        "name": "Valid order",
+                        "command": "echo 'regina XXL x2' | ./plazza 2 5 2000",
+                        "grep": "regina",
+                        "return": 0
+                    },
+                    {
+                        "name": "Multiple orders",
+                        "command": "echo 'regina XXL x2; margarita S x1' | ./plazza 2 5 2000",
+                        "grep": "margarita",
+                        "return": 0
+                    },
+                    {
+                        "name": "Invalid order",
+                        "command": "echo 'badpizza XXL x2' | ./plazza 2 5 2000",
+                        "grep": "*",
+                        "return": 0
+                    }
+                ],
+                "Kitchen-Management": [
+                    {
+                        "name": "Kitchen creation",
+                        "command": "echo 'regina XXL x20' | ./plazza 2 5 2000",
+                        "grep": "kitchen",
+                        "return": 0
+                    },
+                    {
+                        "name": "Status command",
+                        "command": "echo 'status\nexit' | ./plazza 2 5 2000",
+                        "grep": "status",
+                        "return": 0
+                    }
+                ]
+			}
+        ]
+    }
+}

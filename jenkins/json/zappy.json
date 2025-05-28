@@ -1,0 +1,17 @@
+{
+    "zappy": {
+        "build": "make",
+        "tests": [
+            {
+                "Error-Handling": [
+                    {
+                        "name": "Bad argument server",
+                        "command": "./zappy_server not_working",
+                        "output": "*",
+                        "return": 84
+                    }
+                ]
+			}
+        ]
+    }
+}

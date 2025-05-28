@@ -19,6 +19,14 @@ jenkins:
             permissions:
               - "Overall/Administer"
           - entries:
+            name: "API"
+            pattern: ".*"
+            description: "For the api"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+              - "View/Read"
+          - entries:
             name: "Tek"
             pattern: ".*"
             description: "Regular Tek"
