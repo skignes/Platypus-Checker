@@ -45,7 +45,9 @@ function ProjectCard({ project }: { project: ProjectPreview }) {
     project.build.deliveryError || !build ? "" : build.suites[0].timestamp;
   const commit = project.build.deliveryError
     ? undefined
-    : Object.values(project.build.git.buildsByBranchName)[0].revision.SHA1.slice(0, 7);
+    : Object.values(
+        project.build.git.buildsByBranchName,
+      )[0].revision.SHA1.slice(0, 7);
 
   console.log("URL", project.projectUrl);
 
@@ -156,10 +158,12 @@ function ProjectCard({ project }: { project: ProjectPreview }) {
           <div className="grid grid-rows-2 gap-4 text-sm">
             <div className="flex flex-row justify-between items-center">
               <EllapsedTime timestamp={timestamp} />
-              {!project.build.deliveryError && <div className="text-zinc-300">
-                <span className="font-medium">{totalTests}</span>
-                <span className="text-zinc-500 ml-1">tests</span>
-              </div>}
+              {!project.build.deliveryError && (
+                <div className="text-zinc-300">
+                  <span className="font-medium">{totalTests}</span>
+                  <span className="text-zinc-500 ml-1">tests</span>
+                </div>
+              )}
             </div>
             <div className="flex flex-row justify-between items-center">
               <div className="flex items-center text-zinc-400">
@@ -190,6 +194,8 @@ export function ProjectSelectionPage() {
   } = useQuery({
     queryKey: ["project-list-selection"],
     queryFn: getJenkinsProjects,
+    retry: false,
+    refetchOnWindowFocus: true,
   });
 
   if (error) throw error;

@@ -7,7 +7,12 @@ import { useRouter } from "next/navigation";
 
 import { TestResultsDisplay } from "@/components/test-results-display";
 import { TestResultsCharts } from "@/components/test-results-charts";
-import { GitBranch, GitCommit, GitPullRequestClosed, MoveLeft } from "lucide-react";
+import {
+  GitBranch,
+  GitCommit,
+  GitPullRequestClosed,
+  MoveLeft,
+} from "lucide-react";
 import {
   calculatePassRate,
   calculateStatusColor,
@@ -23,7 +28,13 @@ interface TestResultsPageProps {
   project: string;
 }
 
-function HistoryCard({ projectBuild, project }: { projectBuild: ProjectBuild, project: string }) {
+function HistoryCard({
+  projectBuild,
+  project,
+}: {
+  projectBuild: ProjectBuild;
+  project: string;
+}) {
   const passRate = calculatePassRate(projectBuild);
 
   function backgroundColor() {
@@ -74,8 +85,7 @@ function Empty({
         <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-lg">
           <div className="w-full flex flex-row justify-between">
             <h1 className="text-2xl font-bold text-white mb-4">
-              Test Results:{" "}
-              <span className="text-emerald-500">{project}</span>
+              Test Results: <span className="text-emerald-500">{project}</span>
             </h1>
           </div>
 
@@ -155,8 +165,7 @@ function Results({
         <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-lg">
           <div className="w-full flex flex-row justify-between">
             <h1 className="text-2xl font-bold text-white mb-4">
-              Test Results:{" "}
-              <span className="text-emerald-500">{project}</span>
+              Test Results: <span className="text-emerald-500">{project}</span>
             </h1>
             <div className="text-zinc-400">
               {new Date(latestTimestamp).toLocaleString()}
@@ -254,6 +263,8 @@ export function TestResultsPage({ project }: TestResultsPageProps) {
   } = useQuery({
     queryKey: ["jenkins_project"],
     queryFn: async () => await getBuilds(project),
+    retry: false,
+    refetchOnWindowFocus: true,
   });
 
   if (error) throw error;
@@ -266,17 +277,24 @@ export function TestResultsPage({ project }: TestResultsPageProps) {
 
   return (
     <div className="">
-      <Button variant="outline" className="mx-4 mt-4" onClick={() => router.back()}><MoveLeft /><span>Go back</span></Button>
+      <Button
+        variant="outline"
+        className="mx-4 mt-4"
+        onClick={() => router.back()}
+      >
+        <MoveLeft />
+        <span>Go back</span>
+      </Button>
       <div className="flex flex-col min-h-screen bg-zinc-950">
-      {!isLoading && buildHistory ? (
-        latest && latest.deliveryError ? (
-          <Empty project={project} deliveryError={true} />
+        {!isLoading && buildHistory ? (
+          latest && latest.deliveryError ? (
+            <Empty project={project} deliveryError={true} />
+          ) : (
+            <Results project={project} history={buildHistory} />
+          )
         ) : (
-          <Results project={project} history={buildHistory} />
-        )
-      ) : (
-        <LoadingSpinner />
-      )}
+          <LoadingSpinner />
+        )}
       </div>
     </div>
   );

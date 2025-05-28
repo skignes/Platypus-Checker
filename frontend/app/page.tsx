@@ -3,11 +3,7 @@
 import { useEffect } from "react";
 
 import { useRouter } from "next/navigation";
-import {
-  SignIn,
-  SignedOut,
-  useAuth,
-} from "@clerk/nextjs";
+import { SignIn, SignedOut, useAuth } from "@clerk/nextjs";
 
 export default function SigninPage() {
   const router = useRouter();
@@ -22,8 +18,8 @@ export default function SigninPage() {
   return (
     <div className="flex flex-row justify-center items-center w-full h-[90vh]">
       <SignedOut>
-        <SignIn routing="hash" afterSignInUrl="/projects"/>
+        <SignIn routing="hash" afterSignInUrl="/projects" />
       </SignedOut>
     </div>
-  )
+  );
 }

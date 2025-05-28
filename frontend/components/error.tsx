@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle, Home, RotateCcw } from "lucide-react";
 import { motion } from "framer-motion";
+import { PRODUCTION } from "@/lib/constants";
 
 export function ErrorPage({
   error,
@@ -21,9 +21,7 @@ export function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
+  console.error(error);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/50 p-4">
@@ -59,15 +57,23 @@ export function ErrorPage({
               transition={{ delay: 0.3 }}
               className="rounded-md bg-muted p-4"
             >
-              <p className="text-sm text-muted-foreground mb-2">
-                Error details:
-              </p>
-              <p className="text-sm font-mono text-foreground/80 break-words">
-                {error.message || "An unknown error occurred"}
-              </p>
-              {error.digest && (
-                <p className="text-xs font-mono text-muted-foreground mt-2">
-                  Error ID: {error.digest}
+              {!PRODUCTION ? (
+                <>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Error details:
+                  </p>
+                  <p className="text-sm font-mono text-foreground/80 break-words">
+                    {error.message || "An unknown error occurred"}
+                  </p>
+                  {error.digest && (
+                    <p className="text-xs font-mono text-muted-foreground mt-2">
+                      Error ID: {error.digest}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  You do not have access
                 </p>
               )}
             </motion.div>
@@ -83,7 +89,10 @@ export function ErrorPage({
                 <RotateCcw className="mr-2 h-4 w-4" />
                 Try again
               </Button>
-              <Button className="bg-platypus hover:bg-platypus w-full sm:w-1/2" asChild>
+              <Button
+                className="bg-platypus hover:bg-platypus w-full sm:w-1/2"
+                asChild
+              >
                 <Link href="/projects">
                   <Home className="mr-2 h-4 w-4" />
                   Back to home

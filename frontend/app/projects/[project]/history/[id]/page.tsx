@@ -12,11 +12,20 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 import { getSingleBuild } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
-function History({ projectBuild, id }: { projectBuild: ProjectBuild; id: string }) {
+function History({
+  projectBuild,
+  id,
+}: {
+  projectBuild: ProjectBuild;
+  id: string;
+}) {
   const timestamp = projectBuild.build.suites[0].timestamp;
   const [test] = projectBuild.build.suites;
-  const [_, branch] = Object.keys(projectBuild.git.buildsByBranchName)[0].split("/");
-  const commit = Object.values(projectBuild.git.buildsByBranchName)[0].revision.SHA1;
+  const [_, branch] = Object.keys(projectBuild.git.buildsByBranchName)[0].split(
+    "/",
+  );
+  const commit = Object.values(projectBuild.git.buildsByBranchName)[0].revision
+    .SHA1;
   const sections = groupProjectTests(test.cases);
 
   return (
@@ -70,22 +79,32 @@ export default function HistoryPage({ params }: HistoryPageProps) {
     queryKey: ["project-build", id],
     queryFn: async () => await getSingleBuild(project, Number(id)),
     refetchOnWindowFocus: true,
+    retry: false,
   });
 
   if (error) throw error;
 
   return (
     <div className="">
-      <Button variant="outline" className="mx-4 mt-4" onClick={() => router.back()}><MoveLeft /><span>Go back</span></Button>
+      <Button
+        variant="outline"
+        className="mx-4 mt-4"
+        onClick={() => router.back()}
+      >
+        <MoveLeft />
+        <span>Go back</span>
+      </Button>
 
       <div className="min-h-screen bg-zinc-950">
-        <div className="pb-8 transition-opacity duration-500 w-full" >
+        <div className="pb-8 transition-opacity duration-500 w-full">
           <div className="flex flex-col min-h-screen bg-zinc-950">
             {projectBuild && !isLoading && !error ? (
               <>
                 {projectBuild.deliveryError ? (
-                  <p className="w-full text-center text-zinc-600">Delivery Error</p>
-                ): (
+                  <p className="w-full text-center text-zinc-600">
+                    Delivery Error
+                  </p>
+                ) : (
                   <History projectBuild={projectBuild} id={id} />
                 )}
               </>
@@ -95,6 +114,6 @@ export default function HistoryPage({ params }: HistoryPageProps) {
           </div>
         </div>
       </div>
-  </div>
+    </div>
   );
 }

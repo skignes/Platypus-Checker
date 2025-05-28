@@ -29,6 +29,8 @@ export type ProjectPreview = {
 
 export type Role = "admin" | string;
 
+export type Roles = Role | Role[];
+
 export type JenkinsTestResult = {
   name: string; // "section-name:test-name"
   duration: number;

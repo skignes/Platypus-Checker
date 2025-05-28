@@ -11,18 +11,20 @@ import {
   ProjectBuild,
   ProjectPreview,
 } from "@/lib/definitions";
-import { sleep } from "./utils";
+import { AccessDeniedError, sleep } from "./utils";
 import { auth } from "@clerk/nextjs/server";
-import { Role } from "@/lib/definitions";
+import { Roles, Role } from "@/lib/definitions";
 
 //*********
 // CLERK
 //*********
 
-export const getRole = async (): Promise<Role | undefined> => {
+export const getRoles = async (): Promise<Roles | undefined> => {
   const { sessionClaims } = await auth();
   // @ts-ignore:
-  return sessionClaims?.metadata?.role;
+  const roles = sessionClaims?.metadata?.role;
+  if (Array.isArray(roles)) return roles.map((r) => r.toLowerCase());
+  return roles;
 };
 
 async function requestGetServer<T>(url: string): Promise<T | undefined> {
@@ -85,15 +87,20 @@ export async function getBuilds(project: string): Promise<BuildHistory> {
   const { userId } = await auth();
   if (!userId) throw new Error("You must be logged in to use the service");
 
-  const role = await getRole();
-  if (role === undefined) throw new Error("You do not have access");
+  const roles = await getRoles();
+  if (roles === undefined) throw new Error("You do not have access");
 
   if (project.length == 0) throw new Error("invalid repository");
 
   const [folderName, ...rest] = project.split("-");
   const projectName = rest.join("-");
 
-  if (projectName !== role && role !== "admin")
+  if (
+    (Array.isArray(roles)
+      ? !roles.includes(projectName.toLowerCase())
+      : projectName !== roles) &&
+    (Array.isArray(roles) ? !roles.includes("admin") : roles !== "admin")
+  )
     throw new Error("You do not have access to this project");
 
   const url = `${JENKINS_URL}/job/${folderName}/job/${projectName}/api/json`;
@@ -137,13 +144,18 @@ export async function getSingleBuild(
   const { userId } = await auth();
   if (!userId) throw new Error("You must be logged in to use the service");
 
-  const role = await getRole();
-  if (role === undefined) throw new Error("You do not have access");
+  const roles = await getRoles();
+  if (roles === undefined) throw new Error("You do not have access");
 
   const [folderName, ...rest] = project.split("-");
   const projectName = rest.join("-");
 
-  if (role !== projectName && role !== "admin")
+  if (
+    (Array.isArray(roles)
+      ? !roles.includes(projectName.toLowerCase())
+      : projectName !== roles) &&
+    (Array.isArray(roles) ? !roles.includes("admin") : roles !== "admin")
+  )
     throw new Error("You do not have access to this project");
 
   const build = await requestGetServer<JenkinsBuildResult>(
@@ -164,8 +176,9 @@ export async function getJenkinsProjects(): Promise<ProjectPreview[]> {
   const { userId } = await auth();
   if (!userId) throw new Error("You must be logged in to use the service");
 
-  const role = await getRole();
-  if (role === undefined) throw new Error("You do not have access");
+  const roles = await getRoles();
+  if (roles === undefined)
+    throw new AccessDeniedError("You do not have access");
 
   const jobList = await requestGetServer<JenkinsJobList>(
     JENKINS_URL + "/api/json",
@@ -195,7 +208,13 @@ export async function getJenkinsProjects(): Promise<ProjectPreview[]> {
         throw new Error("Could not request project " + job.name);
       if (project.lastBuild === null) continue;
 
-      if (project.displayName !== role && role !== "admin") continue;
+      if (
+        (Array.isArray(roles)
+          ? !roles.includes(project.displayName.toLowerCase())
+          : project.displayName !== roles) &&
+        (Array.isArray(roles) ? !roles.includes("admin") : roles !== "admin")
+      )
+        continue;
 
       previews.push({
         displayName: project.displayName,

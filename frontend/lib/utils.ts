@@ -94,3 +94,10 @@ export function getEllapsedTime(timestamp: string): string {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export class AccessDeniedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AccessDeniedError";
+  }
+}
