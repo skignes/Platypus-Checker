@@ -75,21 +75,26 @@ export default function HistoryPage({ params }: HistoryPageProps) {
   if (error) throw error;
 
   return (
-    <div className="p-10">
-      <Button variant="outline" className="" onClick={() => router.back()}><MoveLeft /><span>Go back</span></Button>
-      <div className="flex flex-col min-h-screen bg-zinc-950">
-        {projectBuild && !isLoading && !error ? (
-          <>
-            {projectBuild.deliveryError ? (
-              <p className="w-full text-center text-zinc-600">Delivery Error</p>
-            ): (
-              <History projectBuild={projectBuild} id={id} />
+    <div className="">
+      <Button variant="outline" className="mx-4 mt-4" onClick={() => router.back()}><MoveLeft /><span>Go back</span></Button>
+
+      <div className="min-h-screen bg-zinc-950">
+        <div className="pb-8 transition-opacity duration-500 w-full" >
+          <div className="flex flex-col min-h-screen bg-zinc-950">
+            {projectBuild && !isLoading && !error ? (
+              <>
+                {projectBuild.deliveryError ? (
+                  <p className="w-full text-center text-zinc-600">Delivery Error</p>
+                ): (
+                  <History projectBuild={projectBuild} id={id} />
+                )}
+              </>
+            ) : (
+              <LoadingSpinner />
             )}
-          </>
-        ) : (
-          <LoadingSpinner />
-        )}
+          </div>
+        </div>
       </div>
-    </div>
+  </div>
   );
 }

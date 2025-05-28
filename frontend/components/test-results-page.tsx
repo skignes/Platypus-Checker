@@ -265,8 +265,8 @@ export function TestResultsPage({ project }: TestResultsPageProps) {
   ) as ProjectBuild[] | undefined;
 
   return (
-    <div className="px-10">
-      <Button variant="outline" className="" onClick={() => router.back()}><MoveLeft /><span>Go back</span></Button>
+    <div className="">
+      <Button variant="outline" className="mx-4 mt-4" onClick={() => router.back()}><MoveLeft /><span>Go back</span></Button>
       <div className="flex flex-col min-h-screen bg-zinc-950">
       {!isLoading && buildHistory ? (
         latest && latest.deliveryError ? (

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import {
   SignIn,
@@ -11,7 +13,11 @@ export default function SigninPage() {
   const router = useRouter();
   const { isSignedIn } = useAuth();
 
-  if (isSignedIn === true) router.push("/projects");
+  useEffect(() => {
+    if (isSignedIn === true) {
+      router.push("/projects");
+    }
+  }, [isSignedIn]);
 
   return (
     <div className="flex flex-row justify-center items-center w-full h-[90vh]">

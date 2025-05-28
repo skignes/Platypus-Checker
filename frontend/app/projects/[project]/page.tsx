@@ -1,6 +1,6 @@
 import { use } from "react";
 
-import ClientPage from "../[project]/ResultPage";
+import { TestResultsPage } from "@/components/test-results-page";
 
 interface ResultPageProps {
   params: Promise<{ project: string }>;
@@ -9,5 +9,5 @@ interface ResultPageProps {
 export default function ResultPage({ params }: ResultPageProps) {
   const { project } = use<{ project: string }>(params);
 
-  return <ClientPage project={project} />;
+  return <TestResultsPage project={project} />;
 }

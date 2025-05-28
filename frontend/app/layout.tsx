@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import type React from "react";
 import "@/app/globals.css";
 import { Inter, Ubuntu } from "next/font/google";
@@ -44,12 +45,26 @@ export default function RootLayout({
             }}
           >
             <header className="flex justify-between items-center p-4 gap-4 h-16 border-b">
-              <div className="flex flex-row items-center space-x-4">
-                <Image src={logo} alt="" className="h-10 w-10" />
-                <span className={`${ubuntu.className} text-platypus font-extrabold text-3xl`}>
-                  Platypus Checker
-                </span>
-              </div>
+              <SignedIn>
+                <Link href="/projects">
+                  <div className="flex flex-row items-center space-x-4">
+                    <Image src={logo} alt="" className="h-10 w-10" />
+                    <span className={`${ubuntu.className} text-platypus font-extrabold text-3xl text-nowrap`}>
+                      Platypus Checker
+                    </span>
+                  </div>
+                </Link>
+              </SignedIn>
+              <SignedOut>
+                <Link href="/">
+                  <div className="flex flex-row items-center space-x-4">
+                    <Image src={logo} alt="" className="h-10 w-10" />
+                    <span className={`${ubuntu.className} text-platypus font-extrabold text-3xl text-nowrap`}>
+                      Platypus Checker
+                    </span>
+                  </div>
+                </Link>
+              </SignedOut>
               <div className="flex flex-row space-x-4">
                 <SignedIn>
                   <UserButton />

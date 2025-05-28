@@ -71,7 +71,6 @@ async function pollUntil<T>(
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     const res = await fn();
-    console.log("POLL", res);
     if (res !== undefined) return res;
     await sleep(intervalMs);
   }
@@ -87,7 +86,6 @@ export async function getBuilds(project: string): Promise<BuildHistory> {
   if (!userId) throw new Error("You must be logged in to use the service");
 
   const role = await getRole();
-  console.log("ROEL", role);
   if (role === undefined) throw new Error("You do not have access");
 
   if (project.length == 0) throw new Error("invalid repository");
