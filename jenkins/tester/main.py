@@ -121,11 +121,12 @@ def junitReport(tests, file):
         tree.write(f, encoding='utf-8')
 
 
-def execCmd(cmd, path, log_file=None):
+def execCmd(cmd, path, log_file=None, timeout=10):
     print(f"[INFO] - Running command: {cmd}")
     start_time = time.time()
 
-    cmd = f"timeout 10 {cmd}"
+    if timeout is not None:
+        cmd = f"timeout {timeout}s {cmd}"
 
     process = subprocess.Popen(
         cmd,
@@ -161,7 +162,7 @@ def buildExercise(repo, exercise_name, exercise_config, log_dir):
 
     print(f"\n=== Building {exercise_name} ===")
     log_file = f"{log_dir}/build.log"
-    result = execCmd(build_cmd, repo, log_file)
+    result = execCmd(build_cmd, repo, log_file, None)
 
     build_passed = result['returncode'] == expected_code
 
@@ -194,9 +195,10 @@ def runExerciseTests(repo, tests, exercise_name, tests_config, log_dir):
         grep_value = test_info.get('grep')
         expected_code = int(test_info.get('return', 0))
         std_type = test_info.get('std', 'stdout')
+        timeout = test_info.get('timeout', 10)
 
         log_file = f"{log_dir}/{test_name}.log"
-        result = execCmd(command, repo, log_file)
+        result = execCmd(command, repo, log_file, timeout)
 
         output_to_check = result.get(std_type, "")
 
