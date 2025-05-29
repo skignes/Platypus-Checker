@@ -65,7 +65,7 @@
                     {
                         "name": "Invalid order",
                         "command": "echo 'badpizza XXL x2' | ./plazza 2 5 2000",
-                        "grep": "*",
+                        "output": "*",
                         "return": 0
                     }
                 ],
