@@ -7,6 +7,9 @@ jenkins:
         - id: "admin"
           name: "admin"
           password: "${USER_ADMIN_PASSWORD}"
+        - id: "api"
+          name: "api"
+          password: "${USER_API_PASSWORD}"
   authorizationStrategy:
     roleBased:
       roles:
@@ -19,6 +22,7 @@ jenkins:
             permissions:
               - "Overall/Administer"
           - entries:
+              - user: "api"
             name: "API"
             pattern: ".*"
             description: "For the api"

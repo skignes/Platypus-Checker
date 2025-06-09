@@ -21,6 +21,7 @@ services:
     environment:
       CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs"
       USER_ADMIN_PASSWORD: "admin"
+      USER_API_PASSWORD: "api"
       BINARY: "/opt/jenkins/binary"
       JSON: "/opt/jenkins/json"
     entrypoint:

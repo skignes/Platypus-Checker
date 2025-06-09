@@ -16,28 +16,145 @@ Platypus Checker is a complete **Jenkins** setup designed to automate the proces
 
 - A linux machine with **Docker** installed.
 - Access to your code repository.
+- A **Clerk** account.
 
 ## Setup
 
-1. Clone this repository to your local machine:
-```bash
-git clone https://github.com/skignes/Platypus-Checker
-cd Platypus-Checker
-```
+The setup process is divided into three main parts: **Jenkins**, **Clerk**, and the **Frontend**.
 
-2. Start the Jenkins instance using Docker:
-```bash
-docker compose up -d
-```
+---
 
-3. Access Jenkins at `http://localhost:8080`:
-    - The default password is `admin` for the user `admin`
+### 1. Jenkins Setup
 
-4. Configure the pipeline:
-    - Add your repository URL.
-    - Set up any required environment variables.
+1. **Clone this repository to your machine:**
 
-5. Ensure all dependencies for your project are installed on the build agent.
+    ```bash
+    git clone https://github.com/skignes/Platypus-Checker.git
+    cd Platypus-Checker
+    ```
+
+2. **Build the Jenkins instance:**
+
+    ```bash
+    docker compose build jenkins --no-cache
+    ```
+
+3. **Start Jenkins:**
+
+    ```bash
+    docker compose up jenkins -d
+    ```
+
+4. **Access Jenkins:**  
+   Open `http://<your-ip>:8080` in your browser.
+
+    - Default credentials:
+        - **User:** `admin`
+        - **Password:** `admin`
+
+5. **Enable CORS in Jenkins:**
+
+    - Go to: `http://<your-ip>:8080/manage/configure`
+    - Scroll down and set:
+        - `Access-Control-Allow-Origins`: `*`
+        - `Access-Control-Allow-Methods`: `GET, POST, OPTIONS`
+        - `Access-Control-Allow-Headers`: `Authorization, Content-Type`
+
+        ![CORS Settings](img/cors.jpg)
+
+---
+
+### 2. Clerk Configuration
+
+1. **Configure Clerk metadata:**
+
+    - In your Clerk dashboard, go to **Configure** > **Session**.
+    - Under customization for `sessions`, add:
+
+    ```
+    {
+        "metadata": "{{user.public_metadata}}"
+    }
+    ```
+
+    - It should look like this:
+
+    ![Clerk General Configuration](img/clerk_general_config.jpg)
+
+2. **Set user permissions:**
+
+    - When connecting via GitHub, users will not have access by default.
+    - Assign permissions in the **metadata** section for each user:
+        - `admin`: Access to all projects.
+        - `ftrace`: Access to the `ftrace` project.
+        - `zappy`: Access to the `zappy` project.
+        - Multiple permissions can be assigned as a list.
+
+    - Example for `admin` permission:
+
+    ![Admin Clerk Permission](img/admin_clerk_permission.jpg)
+
+    - Example for `ftrace` permission:
+
+    ![Ftrace Clerk Permission](img/ftrace_clerk_permission.jpg)
+
+    - Example for multiple permissions:
+
+    ![Multiple Clerk Permission](img/multiple_clerk_permission.jpg)
+
+---
+
+### 3. Frontend Setup
+
+1. **Create an environment file in the `frontend` directory:**
+
+    - Connect as the `api` user (password: `api`) in Jenkins.
+    - Create a new API Key at: `http://<your-ip>:8080/user/api/security/`
+    - Go to the `frontend` directory and create/edit the `.env` file:
+
+    ```bash
+    cd frontend
+    nvim .env
+    ```
+
+    - Add the following variables:
+
+    ```env
+    JENKINS_URL=**********
+    JENKINS_API_KEY=**********
+    JENKINS_USER=**********
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=**********
+    CLERK_SECRET_KEY=**********
+    NEXT_PUBLIC_PRODUCTION=********** # true or false
+    ```
+
+    - For more details on Clerk, see the wiki.
+
+2. **Build the frontend:**
+
+    ```bash
+    docker compose build frontend --no-cache
+    ```
+
+3. **Start the frontend:**
+
+    ```bash
+    docker compose up frontend -d
+    ```
+
+    - The frontend will be available at: `http://<your-ip>:3000`
+
+---
+
+### 4. Pipeline Configuration
+
+1. **Run the Seed job:**
+
+    - In Jenkins, run the `Seed` job with the **user** and **repository name** (e.g., `skignes/Platypus-Checker`).
+    - A new job will be created in the `PSU` directory.
+    - To test a repository, build the job and wait for the results (ensure all dependencies are installed).
+    - You can change the directory and other parameters—see the wiki for more information.
+
 
 ## Usage
 
