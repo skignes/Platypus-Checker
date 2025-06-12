@@ -19,6 +19,7 @@ services:
     volumes:
       - jenkins-platypus-data:/var/jenkins_home
     environment:
+      FRONTEND_URL: "http://localhost:3000/"
       CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs"
       USER_ADMIN_PASSWORD: "admin"
       USER_API_PASSWORD: "api"

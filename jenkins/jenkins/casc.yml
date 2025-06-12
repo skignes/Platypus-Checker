@@ -45,7 +45,7 @@ unclassified:
   accessControlsFilter:
     allowedHeaders: "Authorization, Content-Type"
     allowedMethods: "GET, POST, OPTIONS"
-    allowedOrigins: "*"
+    allowedOrigins: "${FRONTEND_URL}"
     enabled: true
 
 # WARN: To disbale script security un-comment those line

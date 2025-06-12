@@ -33,19 +33,31 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
     cd Platypus-Checker
     ```
 
-2. **Build the Jenkins instance:**
+2. In the `docker-compose` file, change the environment variable named `FRONTEND_URL` to the URL of your frontend.
+
+    ```docker-compose
+    environment:
+      FRONTEND_URL: "http://<your-url>/"
+      CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs"
+      USER_ADMIN_PASSWORD: "admin"
+      USER_API_PASSWORD: "api"
+      BINARY: "/opt/jenkins/binary"
+      JSON: "/opt/jenkins/json"
+    ```
+
+3. **Build the Jenkins instance:**
 
     ```bash
     docker compose build jenkins --no-cache
     ```
 
-3. **Start Jenkins:**
+4. **Start Jenkins:**
 
     ```bash
     docker compose up jenkins -d
     ```
 
-4. **Access Jenkins:**
+5. **Access Jenkins:**
    Open `http://<your-ip>:8080` in your browser.
 
     - Default credentials:
