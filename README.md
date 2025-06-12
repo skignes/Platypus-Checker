@@ -83,7 +83,12 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
 
     ![Clerk General Configuration](img/clerk_general_config.jpg)
 
-2. **Set user permissions:**
+> [!NOTE]
+> The next step is optional
+
+2. If you want to deploy it on the **internet** follow the documentation of **Clerk** : https://clerk.com/docs/deployments/overview
+
+3. **Set user permissions:**
 
     - When connecting via GitHub, users will not have access by default.
     - Assign permissions in the **metadata** section for each user:
