@@ -48,7 +48,7 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
 3. **Build the Jenkins instance:**
 
     ```bash
-    docker compose build jenkins --no-cache
+    docker compose build jenkins
     ```
 
 4. **Start Jenkins:**
@@ -129,7 +129,7 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
     ```env
     JENKINS_URL=**********
     JENKINS_API_KEY=**********
-    JENKINS_USER=**********
+    JENKINS_USER=********** # Should be api
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=**********
     CLERK_SECRET_KEY=**********
     NEXT_PUBLIC_PRODUCTION=********** # true or false
@@ -140,7 +140,7 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
 2. **Build the frontend:**
 
     ```bash
-    docker compose build frontend --no-cache
+    docker compose build frontend
     ```
 
 3. **Start the frontend:**
@@ -150,18 +150,6 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
     ```
 
     - The frontend will be available at: `http://<your-ip>:3000`
-
----
-
-### 4. Pipeline Configuration
-
-1. **Run the Seed job:**
-
-    - In Jenkins, run the `Seed` job with the **user** and **repository name** (e.g., `skignes/Platypus-Checker`).
-    - A new job will be created in the `PSU` directory.
-    - To test a repository, build the job and wait for the results (ensure all dependencies are installed).
-    - You can change the directory and other parameters—see the wiki for more information.
-
 
 ## Usage
 
@@ -174,6 +162,8 @@ To run the tests on your private repository you need to add a `ssh-key`. So to d
 docker exec -it jenkins-platypus zsh
 # Generate a new ssh key
 ssh-keygen
+# Add github to your know-host list
+ssh-keyscan github.com >> ~/.ssh/known_hosts
 ```
 
 Put the information you want.
@@ -219,6 +209,21 @@ To see the **Github** repository there is a github button. You can click on it a
 
 On the **workspace** part there is the log of the tests runned. And also the repository when it was clone.
 
+#### Change the directory and Json file
+
+- To change the directory and json file used for the test. You need to change either the `Seed` or the **job** that you created.
+    - Change the `PSU` inside the job : `job("PSU/${DISPLAY_NAME}") {` to the one you want (it must exist)
+    - Change the `json path` to change the file used for the test :
+
+        ```bash
+        python3 "/var/jenkins_home/main.py" \
+            --repo="repository" \
+            --junit="results" \
+            --log="logs" \
+            --json="$JSON/ftrace.json"
+        ```
+
+
 > [!CAUTION]
 > The job will fail if the repo just got created.
 
@@ -229,6 +234,11 @@ This project is built with:
 - [![Jenkins](https://img.shields.io/badge/Jenkins-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io)
 - [![Docker](https://img.shields.io/badge/Docker-blue?logo=docker&logoColor=white)](https://www.docker.com)
 - [![Python](https://img.shields.io/badge/Python-306998?logo=python&logoColor=FFD43B)](https://www.python.org)
+- [![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+- [![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+- [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+- [![Clerk](https://img.shields.io/badge/Clerk-3b82f6?logo=clerk&logoColor=white)](https://clerk.com/)
+- [![pnpm](https://img.shields.io/badge/pnpm-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 
 ## Contributors
 
