@@ -7,6 +7,7 @@ Platypus Checker is a complete **Jenkins** setup designed to automate the proces
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Usage](#usage)
+- [Update](#update)
 - [Build With](#build-with)
 - [Contributors](#contributors)
 - [Contributing](#contributing)
@@ -226,6 +227,28 @@ On the **workspace** part there is the log of the tests runned. And also the rep
 
 > [!CAUTION]
 > The job will fail if the repo just got created.
+
+## Update
+
+Keeping your services up to date ensures you benefit from the latest features and security patches. Follow the steps below to update Jenkins or the frontend:
+
+### Update Jenkins
+
+Rebuild and restart the Jenkins service to apply any changes:
+
+```bash
+docker compose build jenkins
+docker compose up jenkins -d
+```
+
+### Update Frontend
+
+For the frontend, use the `--no-cache` flag to ensure a fresh build, then restart the service:
+
+```bash
+docker compose build --no-cache frontend
+docker compose up frontend -d
+```
 
 ## Build With
 
