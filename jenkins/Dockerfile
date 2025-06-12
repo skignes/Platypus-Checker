@@ -39,23 +39,3 @@ RUN jenkins-plugin-cli --plugins    \
     cors-filter:latest
 
 USER jenkins
-
-# Config File
-COPY jenkins/casc.yml		\
-	 /var/jenkins_home/casc_configs/casc.yaml
-
-# Groovy File
-COPY jenkins/job_dsl.groovy	\
-	 /var/jenkins_home/job_dsl.groovy
-
-# Binary Folder
-COPY binary/		\
-	 /opt/jenkins/binary/
-
-# Json Folder
-COPY json/			\
-	 /opt/jenkins/json/
-
-# Main file
-COPY tester/main.py		\
-	 /var/jenkins_home/main.py

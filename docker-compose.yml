@@ -18,6 +18,11 @@ services:
     restart: unless-stopped
     volumes:
       - jenkins-platypus-data:/var/jenkins_home
+      - ./jenkins/tester/main.py:/var/jenkins_home/main.py:ro
+      - ./jenkins/jenkins/casc.yml:/var/jenkins_home/casc_configs/casc.yaml:ro
+      - ./jenkins/jenkins/job_dsl.groovy:/var/jenkins_home/job_dsl.groovy:ro
+      - ./jenkins/binary:/opt/jenkins/binary:ro
+      - ./jenkins/json:/opt/jenkins/json:ro
     environment:
       FRONTEND_URL: "http://localhost:3000/"
       CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs"
