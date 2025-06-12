@@ -45,22 +45,12 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
     docker compose up jenkins -d
     ```
 
-4. **Access Jenkins:**  
+4. **Access Jenkins:**
    Open `http://<your-ip>:8080` in your browser.
 
     - Default credentials:
         - **User:** `admin`
         - **Password:** `admin`
-
-5. **Enable CORS in Jenkins:**
-
-    - Go to: `http://<your-ip>:8080/manage/configure`
-    - Scroll down and set:
-        - `Access-Control-Allow-Origins`: `*`
-        - `Access-Control-Allow-Methods`: `GET, POST, OPTIONS`
-        - `Access-Control-Allow-Headers`: `Authorization, Content-Type`
-
-        ![CORS Settings](img/cors.jpg)
 
 ---
 

@@ -46,7 +46,7 @@ python3 "/var/jenkins_home/main.py" \\
     --repo="repository" \\
     --junit="results" \\
     --log="logs" \\
-    --json="/opt/jenkins/json/ftrace.json"
+    --json="$JSON/ftrace.json"
 """)
                     }
 
