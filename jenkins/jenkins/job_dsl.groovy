@@ -9,13 +9,19 @@ job('Seed') {
     parameters {
         stringParam('GITHUB_NAME', '', 'GitHub repository owner/repo_name (e.g: "Epitech/cobra")')
         stringParam('DISPLAY_NAME', '', 'Display name for the job')
+        stringParam('DIRECTORY_NAME', '', 'Directory name for the directory the job will be')
+        stringParam('JSON_FILE', '', 'Name of the json file (Ex : ftrace for the ftrace.json)')
     }
     steps {
         dsl {
             text('''
                 def username = GITHUB_NAME.split('/')[0]
 
-                job("PSU/${DISPLAY_NAME}") {
+                folder("${DIRECTORY_NAME}") {
+                    displayName("${DIRECTORY_NAME}")
+                }
+
+                job("${DIRECTORY_NAME}/${DISPLAY_NAME}") {
                     properties {
                         githubProjectUrl("https://github.com/${GITHUB_NAME}")
                     }
@@ -46,7 +52,7 @@ python3 "/var/jenkins_home/main.py" \\
     --repo="repository" \\
     --junit="results" \\
     --log="logs" \\
-    --json="$JSON/ftrace.json"
+    --json="$JSON/${JSON_FILE}.json"
 """)
                     }
 
