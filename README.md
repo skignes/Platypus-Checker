@@ -1,12 +1,13 @@
 # Platypus Checker
 
-Platypus Checker is a complete **Jenkins** setup designed to automate the process of testing and validating your project.
+Platypus Checker is a complete **Jenkins** setup designed to automate the process of testing and validating your projects.
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Usage](#usage)
+- [Create Json](#create-json)
 - [Update](#update)
 - [Build With](#build-with)
 - [Contributors](#contributors)
@@ -87,7 +88,7 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
 > [!NOTE]
 > The next step is optional
 
-2. If you want to deploy it on the **internet** follow the documentation of **Clerk** : https://clerk.com/docs/deployments/overview
+2. We advise for **public deployment** to create a **production** instance on your clerk dashboard. Please follow the relevent documentation : https://clerk.com/docs/deployments/overview
 
 3. **Set user permissions:**
 
@@ -141,7 +142,7 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
 2. **Build the frontend:**
 
     ```bash
-    docker compose build frontend
+    docker compose build frontend --no-cache
     ```
 
 3. **Start the frontend:**
@@ -194,9 +195,9 @@ To do so you need to go into the [settings](http://localhost:8080/manage/scriptA
 > [!IMPORTANT]
 > The job will only run on the branch named `main`
 
-So to run the job you first need to **seed** it. To do so you need to go into the seed job at the root of the jenkins.
-You can build it with the name you want for the new job (the one the check will be done on).
-Then You can find this job in the `PSU` directory (because it is the default one) but this can be change.
+So to run the job you first need to **seed** it. To do so you need to go into the `seed job` at the root of the jenkins.
+You can build it with the name you want for the new job (the one the check will be done on), the directory the job will be inside of, and also the json file (Ex: `ftrace` for the `ftrace.json`).
+Then You can find this job in the directory you specified.
 
 When the job is build you will get a nice graph with the info if you :
 
@@ -208,25 +209,49 @@ When the job is build you will get a nice graph with the info if you :
 
 To see the **Github** repository there is a github button. You can click on it and it will redirect you to the repository.
 
-On the **workspace** part there is the log of the tests runned. And also the repository when it was clone.
-
-#### Change the directory and Json file
-
-- To change the directory and json file used for the test. You need to change either the `Seed` or the **job** that you created.
-    - Change the `PSU` inside the job : `job("PSU/${DISPLAY_NAME}") {` to the one you want (it must exist)
-    - Change the `json path` to change the file used for the test :
-
-        ```bash
-        python3 "/var/jenkins_home/main.py" \
-            --repo="repository" \
-            --junit="results" \
-            --log="logs" \
-            --json="$JSON/ftrace.json"
-        ```
-
+On the **workspace** part there is the log of the tests ran. And also the repository when it was clone.
 
 > [!CAUTION]
-> The job will fail if the repo just got created.
+> The job will fail if the repo just got created and no commits are made.
+
+## Create Json
+
+You can create a new `JSON` file for your personal project. Below is the required structure for the `JSON` file:
+
+```json
+{
+    "test": {
+        "build": "make",
+        "tests": [
+            {
+                "Error-Handling": [
+                    {
+                        "name": "Bad argument server",
+                        "command": "./exec this is not working",
+                        "output": "*",
+                        "return": 84
+                    }
+                ],
+                "Functionnal-Test": [
+                    {
+                        "name": "Should work",
+                        "command": "./exec",
+                        "output": "*",
+                        "return": 0
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+Here are the options available for each test:
+
+- `grep`: Use this to filter the output and extract the desired information.
+- `output`: Specify the exact output expected (can be `*` to match anything).
+- `std`: Indicates the standard output to search for the expected output.
+- `timeout`: Sets the timeout duration in seconds; the default is 10 seconds.
 
 ## Update
 
@@ -237,7 +262,7 @@ Keeping your services up to date ensures you benefit from the latest features an
 Rebuild and restart the Jenkins service to apply any changes:
 
 ```bash
-docker compose build jenkins
+docker compose build --no-cache jenkins
 docker compose up jenkins -d
 ```
 
@@ -258,6 +283,7 @@ This project is built with:
 - [![Docker](https://img.shields.io/badge/Docker-blue?logo=docker&logoColor=white)](https://www.docker.com)
 - [![Python](https://img.shields.io/badge/Python-306998?logo=python&logoColor=FFD43B)](https://www.python.org)
 - [![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+- [![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 - [![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 - [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 - [![Clerk](https://img.shields.io/badge/Clerk-3b82f6?logo=clerk&logoColor=white)](https://clerk.com/)
