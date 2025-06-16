@@ -7,6 +7,7 @@ import json
 import subprocess
 import sys
 import os
+import re
 
 
 def parseArgs():
@@ -75,7 +76,7 @@ def junitReport(tests, file):
     testsuite.set('skipped', str(skipped))
     testsuite.set('errors', "0")
 
-    functional_tests = [test_item for test_item in tests if test_item['category'] == 'tests']
+    functional_tests = [test_item for test_item in tests if test_item['category'] in ('tests', 'unit-tests')]
     for functional_test in functional_tests:
         testcase = ET.SubElement(testsuite, 'testcase')
         testcase.set('name', functional_test['name'])
@@ -172,6 +173,52 @@ def buildExercise(repo, exercise_name, exercise_config, log_dir):
     print(f"Expected Return Code: {expected_code}")
 
     return build_passed
+
+
+def runUnitTestSection(repo, exercise_name, exercise_config, log_dir, tests):
+    unit_test_cmd = exercise_config.get("unit-test")
+    if not unit_test_cmd:
+        return tests
+
+    print(f"\n=== Running Unit Tests for {exercise_name} ===")
+    log_file = f"{log_dir}/unit-tests.log"
+    result = execCmd(unit_test_cmd, repo, log_file, 300)
+
+    combined_output = result['stdout'] + '\n' + result['stderr']
+
+    test_lines = re.findall(r'\[(FAIL|SKIP)\]\s+([^\s:]+(?:::[^\s:]+)*):', combined_output)
+    found_any = False
+    for status, test_name in test_lines:
+        found_any = True
+        res = 1 if status == "FAIL" else 'skipped'
+        tests.append({
+            'name': f"{exercise_name}:Unit-Tests:{test_name}",
+            'category': 'unit-tests',
+            'result': res,
+            'stdout': result['stdout'],
+            'stderr': result['stderr'],
+            'time': result['time'],
+            'expected_output': "*",
+            'expected_code': 0,
+            'actual_code': 1 if res == 1 else 0,
+            'exact_match': True
+        })
+
+    if not found_any:
+        tests.append({
+            'name': f"{exercise_name}:Unit-Tests:All tests passed",
+            'category': 'unit-tests',
+            'result': 0,
+            'stdout': result['stdout'],
+            'stderr': result['stderr'],
+            'time': result['time'],
+            'expected_output': "*",
+            'expected_code': 0,
+            'actual_code': result['returncode'],
+            'exact_match': True
+        })
+
+    return tests
 
 
 def runExerciseTests(repo, tests, exercise_name, tests_config, log_dir):
@@ -294,6 +341,8 @@ def main():
                 tests = runExerciseTests(args.repo, tests, name, flattened_tests, args.log)
             else:
                 print(f"[WARNING] - No tests found for {name}")
+
+            tests = runUnitTestSection(args.repo, name, exercise_config, args.log, tests)
 
         print(f"\n[INFO] - Cleaning repository after {name}")
         clean(args)

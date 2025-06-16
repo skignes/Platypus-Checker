@@ -1,6 +1,7 @@
 {
     "plazza": {
         "build": "make",
+        "unit-test": "make tests_run",
         "tests": [
             {
                 "Error-Handling": [
