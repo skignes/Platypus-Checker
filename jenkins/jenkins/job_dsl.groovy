@@ -1,8 +1,3 @@
-folder('PSU') {
-    displayName('PSU')
-    description('Folder containing all the PSU project')
-}
-
 job('Seed') {
     description('Create a new test for every GitHub user')
 
