@@ -29,6 +29,7 @@ jenkins:
             permissions:
               - "Overall/Read"
               - "Job/Read"
+              - "Job/Build"
               - "View/Read"
           - entries:
             name: "Tek"
