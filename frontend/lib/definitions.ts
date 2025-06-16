@@ -65,11 +65,13 @@ export type JenkinsBuildResult = {
 export type ProjectBuild = {
   build: JenkinsBuildResult;
   git: JenkinsGitInfo;
+  projectUrl: string;
   deliveryError: false;
 };
 
 export type DeliveryError = {
   id: number;
+  projectUrl: string;
   deliveryError: true;
 };
 

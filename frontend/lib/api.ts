@@ -11,9 +11,8 @@ import {
   ProjectBuild,
   ProjectPreview,
 } from "@/lib/definitions";
-import { AccessDeniedError, sleep } from "./utils";
 import { auth } from "@clerk/nextjs/server";
-import { Roles, Role } from "@/lib/definitions";
+import { Roles } from "@/lib/definitions";
 
 //*********
 // CLERK
@@ -46,7 +45,7 @@ async function requestGetServer<T>(url: string): Promise<T | undefined> {
 
 async function requestPostServer(
   url: string,
-  body: string,
+  body?: string,
 ): Promise<number | undefined> {
   try {
     const response = await fetch(url, {
@@ -63,20 +62,14 @@ async function requestPostServer(
   }
 }
 
-async function pollUntil<T>(
-  fn: () => Promise<T | undefined>,
-  {
-    intervalMs = 1000,
-    timeoutMs = 60_000,
-  }: { intervalMs?: number; timeoutMs?: number } = {},
-): Promise<T> {
-  const start = Date.now();
-  while (Date.now() - start < timeoutMs) {
-    const res = await fn();
-    if (res !== undefined) return res;
-    await sleep(intervalMs);
-  }
-  throw new Error(`Timed out after ${timeoutMs} ms`);
+export async function isAdmin() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("You must be logged in to use the service");
+
+  const roles = await getRoles();
+  if (roles === undefined) throw new Error("You do not have access");
+
+  return Array.isArray(roles) ? roles.includes("admin") : roles === "admin";
 }
 
 //*********
@@ -122,7 +115,11 @@ export async function getBuilds(project: string): Promise<BuildHistory> {
       buildUrl + "/git/api/json", // TODO: check api without /git
     );
     if (build == undefined) {
-      builds.push({ id: buildInfo.number, deliveryError: true });
+      builds.push({
+        id: buildInfo.number,
+        deliveryError: true,
+        projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`,
+      });
       continue;
     }
     if (git == undefined) {
@@ -131,7 +128,12 @@ export async function getBuilds(project: string): Promise<BuildHistory> {
       );
     } else {
       build.id = buildInfo.number;
-      builds.push({ build, git, deliveryError: false });
+      builds.push({
+        build,
+        git,
+        projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`,
+        deliveryError: false,
+      });
     }
   }
   return builds;
@@ -166,10 +168,19 @@ export async function getSingleBuild(
     `${JENKINS_URL}/job/${folderName}/job/${projectName}/${id}/git/api/json`,
   );
   if (build == undefined) {
-    return { id: 0, deliveryError: true };
+    return {
+      id: 0,
+      deliveryError: true,
+      projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`,
+    };
   }
   if (git == undefined) throw new Error(`Git couldn't be retrieved for Build`);
-  return { build, git, deliveryError: false };
+  return {
+    build,
+    git,
+    projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`,
+    deliveryError: false,
+  };
 }
 
 export async function getJenkinsProjects(): Promise<ProjectPreview[]> {
@@ -177,8 +188,7 @@ export async function getJenkinsProjects(): Promise<ProjectPreview[]> {
   if (!userId) throw new Error("You must be logged in to use the service");
 
   const roles = await getRoles();
-  if (roles === undefined)
-    throw new AccessDeniedError("You do not have access");
+  if (roles === undefined) throw new Error("You do not have access");
 
   const jobList = await requestGetServer<JenkinsJobList>(
     JENKINS_URL + "/api/json",
@@ -228,4 +238,9 @@ export async function getJenkinsProjects(): Promise<ProjectPreview[]> {
   }
 
   return previews;
+}
+
+export async function runJenkinsJob(folderName: string, projectName: string) {
+  const url = `${JENKINS_URL}/job/${folderName}/job/${projectName}/build`;
+  await requestPostServer(url, ""); // I assume this request will finish before the job finishes. So we can't know when it does finish. Which means the UI won't be updated automatically, and the user will have to refresh.
 }

@@ -23,6 +23,8 @@ import { ProjectBuild } from "@/lib/definitions";
 import { LoadingSpinner } from "./loading-spinner";
 import { getBuilds } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { RunJobButton, ViewInJenkinsButton } from "./admin-buttons";
+import { isAdmin } from "@/lib/api";
 
 interface TestResultsPageProps {
   project: string;
@@ -267,6 +269,13 @@ export function TestResultsPage({ project }: TestResultsPageProps) {
     refetchOnWindowFocus: true,
   });
 
+  const { data: admin } = useQuery<boolean>({
+    queryKey: ["is-admin"],
+    queryFn: isAdmin,
+    gcTime: Infinity,
+    staleTime: Infinity,
+  });
+
   if (error) throw error;
 
   const [latest] = !isLoading && history ? history : [];
@@ -275,8 +284,19 @@ export function TestResultsPage({ project }: TestResultsPageProps) {
     history ? history.filter((b) => b.deliveryError === false) : undefined
   ) as ProjectBuild[] | undefined;
 
+  console.log("LATEST", latest);
+
   return (
     <div className="">
+      {admin === true && (
+        <div className="absolute left-0 right-0 w-fit m-auto flex flex-col items-center mt-2 space-y-1">
+          <span className="text-center text-zinc-500 text-sm">Admin Panel</span>
+          <div className="flex flex-row space-x-4">
+            <ViewInJenkinsButton projectUrl={latest.projectUrl} />
+            <RunJobButton project={project} />
+          </div>
+        </div>
+      )}
       <Button
         variant="outline"
         className="mx-4 mt-4"

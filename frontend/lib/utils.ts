@@ -90,14 +90,3 @@ export function getEllapsedTime(timestamp: string): string {
     return years === 1 ? "1 year ago" : `${years} years ago`;
   }
 }
-
-export function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export class AccessDeniedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "AccessDeniedError";
-  }
-}

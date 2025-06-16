@@ -32,15 +32,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ClerkProvider
-          appearance={{
-            baseTheme: dark,
-          }}
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <title>Platypus Checker</title>
           <header className="flex justify-between items-center p-4 gap-4 h-16 border-b">
             <SignedIn>
               <Link href="/projects">
@@ -74,8 +75,8 @@ export default function RootLayout({
           </header>
           <link rel="icon" href="/logo.png" sizes="any" />
           <Providers>{children}</Providers>
-        </ClerkProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
