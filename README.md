@@ -135,6 +135,7 @@ The setup process is divided into three main parts: **Jenkins**, **Clerk**, and 
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=**********
     CLERK_SECRET_KEY=**********
     NEXT_PUBLIC_PRODUCTION=********** # true or false
+    NEXT_PUBLIC_JENKINS_URL=********** # Public jenkins url
     ```
 
     - For more details on Clerk, see the wiki.
@@ -210,6 +211,8 @@ When the job is build you will get a nice graph with the info if you :
 To see the **Github** repository there is a github button. You can click on it and it will redirect you to the repository.
 
 On the **workspace** part there is the log of the tests ran. And also the repository when it was clone.
+
+You can also run the tests on the **Frontend** when you have the `admin` permission.
 
 > [!CAUTION]
 > The job will fail if the repo just got created and no commits are made.
