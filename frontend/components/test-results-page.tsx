@@ -284,8 +284,6 @@ export function TestResultsPage({ project }: TestResultsPageProps) {
     history ? history.filter((b) => b.deliveryError === false) : undefined
   ) as ProjectBuild[] | undefined;
 
-  console.log("LATEST", latest);
-
   return (
     <div className="">
       {admin === true && (
