@@ -76,7 +76,7 @@ def junitReport(tests, file):
     testsuite.set('skipped', str(skipped))
     testsuite.set('errors', "0")
 
-    functional_tests = [test_item for test_item in tests if test_item['category'] in ('tests', 'unit-tests')]
+    functional_tests = [test_item for test_item in tests if test_item['category'] in 'tests']
     for functional_test in functional_tests:
         testcase = ET.SubElement(testsuite, 'testcase')
         testcase.set('name', functional_test['name'])
@@ -186,14 +186,16 @@ def runUnitTestSection(repo, exercise_name, exercise_config, log_dir, tests):
 
     combined_output = result['stdout'] + '\n' + result['stderr']
 
+    synthesis_match = re.search(r'Synthesis: Tested: (\d+) \| Passing: (\d+) \| Failing: (\d+)', combined_output)
+    all_tests = synthesis_match.group(1) if synthesis_match else None
+    passing_tests = synthesis_match.group(2) if synthesis_match else None
+
     test_lines = re.findall(r'\[(FAIL|SKIP)\]\s+([^\s:]+(?:::[^\s:]+)*):', combined_output)
-    found_any = False
     for status, test_name in test_lines:
-        found_any = True
         res = 1 if status == "FAIL" else 'skipped'
         tests.append({
             'name': f"{exercise_name}:Unit-Tests:{test_name}",
-            'category': 'unit-tests',
+            'category': 'tests',
             'result': res,
             'stdout': result['stdout'],
             'stderr': result['stderr'],
@@ -204,19 +206,18 @@ def runUnitTestSection(repo, exercise_name, exercise_config, log_dir, tests):
             'exact_match': True
         })
 
-    if not found_any:
-        tests.append({
-            'name': f"{exercise_name}:Unit-Tests:All tests passed",
-            'category': 'unit-tests',
-            'result': 0,
-            'stdout': result['stdout'],
-            'stderr': result['stderr'],
-            'time': result['time'],
-            'expected_output': "*",
-            'expected_code': 0,
-            'actual_code': result['returncode'],
-            'exact_match': True
-        })
+    tests.append({
+        'name': f"{all_tests}:{passing_tests}",
+        'category': 'tests',
+        'result': 0,
+        'stdout': result['stdout'],
+        'stderr': result['stderr'],
+        'time': result['time'],
+        'expected_output': "*",
+        'expected_code': 0,
+        'actual_code': result['returncode'],
+        'exact_match': True
+    })
 
     return tests
 
