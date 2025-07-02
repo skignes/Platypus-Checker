@@ -5,8 +5,122 @@
             {
                 "Error-Handling": [
                     {
-                        "name": "Bad argument server",
+                        "name": "Bad argument server 1",
                         "command": "./zappy_server not_working",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Bad argument server 2",
+                        "command": "./zappy_server",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 1",
+                        "command": "./zappy_server -x 10",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 2",
+                        "command": "./zappy_server -x",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 3",
+                        "command": "./zappy_server -x 10 -y 10",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 4",
+                        "command": "./zappy_server -x 10 -y",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 5",
+                        "command": "./zappy_server -x 10 -y 10 -n name1 name2",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 6",
+                        "command": "./zappy_server -x 10 -y 10 -n",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 7",
+                        "command": "./zappy_server -x 10 -y 10 -n name1 name2 -c 10",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 8",
+                        "command": "./zappy_server -x 10 -y 10 -n name1 name2 -c",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 9",
+                        "command": "./zappy_server -x 10 -y 10 -n name1 name2 -c 10 -f 100",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument server 10",
+                        "command": "./zappy_server -x 10 -y 10 -n name1 name2 -c 10 -f",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument gui 1",
+                        "command": "./server_gui",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument gui 2",
+                        "command": "./server_gui -h localhost",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument gui 3",
+                        "command": "./server_gui -h",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument gui 4",
+                        "command": "./server_gui -h localhost -p",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument ai 1",
+                        "command": "./ai/zappy_ai.py",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument ai 2",
+                        "command": "./ai/zappy_ai.py -p 4000",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument ai 3",
+                        "command": "./ai/zappy_ai.py -p",
+                        "output": "*",
+                        "return": 84
+                    },
+                    {
+                        "name": "Missing argument ai 4",
+                        "command": "./ai/zappy_ai.py -p 4000 -n",
                         "output": "*",
                         "return": 84
                     }
