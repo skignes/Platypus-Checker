@@ -208,7 +208,7 @@ export function ProjectSelectionPage() {
         );
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-950">
+    <div className="flex flex-col bg-zinc-950">
       {filteredProjects && !isLoading && !error ? (
         <main className="flex-1 container max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-row justify-between items-center mb-6">
@@ -216,7 +216,7 @@ export function ProjectSelectionPage() {
               <span className="text-platypus font-bold text-2xl">
                 {filteredProjects.length}
               </span>{" "}
-              Projects
+              Project{filteredProjects.length > 1 && "s"}
             </h2>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400 h-4 w-4" />

@@ -29,7 +29,7 @@ function History({
   const sections = groupProjectTests(test.cases);
 
   return (
-    <main className="flex-1 container max-w-5xl mx-auto px-4 py-8">
+    <main className="container max-w-5xl mx-auto px-4 py-8">
       <div className="space-y-8">
         <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-lg">
           <div className="w-full flex flex-row justify-between">
@@ -95,7 +95,7 @@ export default function HistoryPage({ params }: HistoryPageProps) {
         <span>Go back</span>
       </Button>
 
-      <div className="min-h-screen bg-zinc-950">
+      <div className="bg-zinc-950">
         <div className="pb-8 transition-opacity duration-500 w-full">
           <div className="flex flex-col min-h-screen bg-zinc-950">
             {projectBuild && !isLoading && !error ? (

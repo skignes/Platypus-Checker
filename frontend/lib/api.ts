@@ -1,6 +1,11 @@
 "use server";
 
-import { JENKINS_URL, JENKINS_USER, JENKINS_API_KEY, PUBLIC_JENKINS_URL } from "@/lib/constants";
+import {
+  JENKINS_URL,
+  JENKINS_USER,
+  JENKINS_API_KEY,
+  PUBLIC_JENKINS_URL,
+} from "@/lib/constants";
 import {
   BuildHistory,
   DeliveryError,
@@ -118,7 +123,11 @@ export async function getBuilds(project: string): Promise<BuildHistory> {
       builds.push({
         id: buildInfo.number,
         deliveryError: true,
-        projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(JENKINS_URL!, PUBLIC_JENKINS_URL!),
+        projectUrl:
+          `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(
+            JENKINS_URL!,
+            PUBLIC_JENKINS_URL!,
+          ),
       });
       continue;
     }
@@ -131,7 +140,11 @@ export async function getBuilds(project: string): Promise<BuildHistory> {
       builds.push({
         build,
         git,
-        projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(JENKINS_URL!, PUBLIC_JENKINS_URL!),
+        projectUrl:
+          `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(
+            JENKINS_URL!,
+            PUBLIC_JENKINS_URL!,
+          ),
         deliveryError: false,
       });
     }
@@ -171,14 +184,20 @@ export async function getSingleBuild(
     return {
       id: 0,
       deliveryError: true,
-      projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(JENKINS_URL!, PUBLIC_JENKINS_URL!),
+      projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(
+        JENKINS_URL!,
+        PUBLIC_JENKINS_URL!,
+      ),
     };
   }
   if (git == undefined) throw new Error(`Git couldn't be retrieved for Build`);
   return {
     build,
     git,
-    projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(JENKINS_URL!, PUBLIC_JENKINS_URL!),
+    projectUrl: `${JENKINS_URL}/job/${folderName}/job/${projectName}`.replace(
+      JENKINS_URL!,
+      PUBLIC_JENKINS_URL!,
+    ),
     deliveryError: false,
   };
 }
@@ -232,7 +251,11 @@ export async function getJenkinsProjects(): Promise<ProjectPreview[]> {
           `${folder.displayName}-${project.displayName}`,
           project.lastBuild.number,
         ),
-        projectUrl: `/projects/${folder.displayName}-${project.displayName}`.replace(JENKINS_URL!, PUBLIC_JENKINS_URL!),
+        projectUrl:
+          `/projects/${folder.displayName}-${project.displayName}`.replace(
+            JENKINS_URL!,
+            PUBLIC_JENKINS_URL!,
+          ),
       });
     }
   }

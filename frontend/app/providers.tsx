@@ -15,11 +15,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
       >
         {children}
-        <footer className="border-t border-zinc-800 py-4 bg-zinc-950">
-          <div className="container max-w-5xl mx-auto px-4 text-center text-zinc-500 text-sm">
-            Platypus &copy; {new Date().getFullYear()}
-          </div>
-        </footer>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -39,42 +39,51 @@ export default function RootLayout({
     >
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased h-full`}
         >
-          <title>Platypus Checker</title>
-          <header className="flex justify-between items-center p-4 gap-4 h-16 border-b">
-            <SignedIn>
-              <Link href="/projects">
-                <div className="flex flex-row items-center space-x-4">
-                  <Image src={logo} alt="" className="h-10 w-10" />
-                  <span
-                    className={`${ubuntu.className} text-platypus font-extrabold text-3xl text-nowrap`}
-                  >
-                    Platypus Checker
-                  </span>
-                </div>
-              </Link>
-            </SignedIn>
-            <SignedOut>
-              <Link href="/">
-                <div className="flex flex-row items-center space-x-4">
-                  <Image src={logo} alt="" className="h-10 w-10" />
-                  <span
-                    className={`${ubuntu.className} text-platypus font-extrabold text-3xl text-nowrap`}
-                  >
-                    Platypus Checker
-                  </span>
-                </div>
-              </Link>
-            </SignedOut>
-            <div className="flex flex-row space-x-4">
+          <div className="flex flex-col min-h-[100vh]">
+            <title>Platypus Checker</title>
+            <header className="flex justify-between items-center p-4 gap-4 h-16 border-b">
               <SignedIn>
-                <UserButton />
+                <Link href="/projects">
+                  <div className="flex flex-row items-center space-x-4">
+                    <Image src={logo} alt="" className="h-10 w-10" />
+                    <span
+                      className={`${ubuntu.className} text-platypus font-extrabold text-3xl text-nowrap`}
+                    >
+                      Platypus Checker
+                    </span>
+                  </div>
+                </Link>
               </SignedIn>
-            </div>
-          </header>
-          <link rel="icon" href="/logo.png" sizes="any" />
-          <Providers>{children}</Providers>
+              <SignedOut>
+                <Link href="/">
+                  <div className="flex flex-row items-center space-x-4">
+                    <Image src={logo} alt="" className="h-10 w-10" />
+                    <span
+                      className={`${ubuntu.className} text-platypus font-extrabold text-3xl text-nowrap`}
+                    >
+                      Platypus Checker
+                    </span>
+                  </div>
+                </Link>
+              </SignedOut>
+              <div className="flex flex-row space-x-4">
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
+            </header>
+            <link rel="icon" href="/logo.png" sizes="any" />
+            <main className="flex-1">
+              <Providers>{children}</Providers>
+            </main>
+            <footer className="border-t border-zinc-800 py-4 bg-zinc-950">
+              <div className="container max-w-5xl mx-auto px-4 text-center text-zinc-500 text-sm">
+                Platypus &copy; {new Date().getFullYear()}
+              </div>
+            </footer>
+          </div>
         </body>
       </html>
     </ClerkProvider>
