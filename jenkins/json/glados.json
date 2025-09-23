@@ -1,0 +1,17 @@
+{
+  "glados": {
+    "build": "make",
+    "tests": [
+      {
+        "Error-Handling": [
+          {
+            "name": "Help",
+            "command": "./glados --help",
+            "output": "*",
+            "return": 0
+          }
+        ]
+      }
+    ]
+  }
+}
