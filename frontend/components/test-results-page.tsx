@@ -178,7 +178,7 @@ function Results({
             <div className="flex items-center text-zinc-300">
               <GitBranch className="h-4 w-4 mr-2 text-zinc-500" />
               Branch:{" "}
-              <span className="ml-1 font-medium text-white">{branch}</span>
+              <span className="ml-1 font-medium text-white">main</span>
             </div>
             <div className="flex items-center text-zinc-300 truncate">
               <GitCommit className="h-4 w-4 min-h-4 min-w-4 mr-2 text-zinc-500" />
