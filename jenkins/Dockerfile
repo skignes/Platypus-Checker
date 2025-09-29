@@ -7,7 +7,12 @@ RUN apt-get update &&   \
     apt-get install -y  \
     neovim zsh          \
     build-essential     \
+    binutils            \
+    clang               \
+    gcc-x86-64-linux-gnu  \
+    g++-x86-64-linux-gnu  \
     libelf-dev          \
+    libgmp-dev          \
     bash                \
     curl                \
     git                 \
@@ -31,12 +36,21 @@ RUN apt-get update &&   \
 RUN curl -L https://downloads.haskell.org/~ghcup/x86_64-linux-ghcup -o /usr/bin/ghcup && \
     chmod +x /usr/bin/ghcup
 
-ENV PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
+ENV PATH="/root/.ghcup/bin:/usr/local/bin:$PATH"
 
 RUN ghcup install cabal 3.16.0.0 && \
     ghcup install ghc 9.8.4 && \
     ghcup install stack && \
-    ghcup set 9.8.4
+    ghcup set 9.8.4 && \
+    chmod +x /root/.ghcup/bin/stack && \
+    chmod o+rx /root/.ghcup && \
+    chmod o+rx /root/.ghcup/bin && \
+    cp /root/.ghcup/bin/stack /usr/local/bin/stack && \
+    chown root:root /usr/local/bin/stack && \
+    chmod 755 /usr/local/bin/stack && \
+    cp /root/.ghcup/bin/ghc /usr/local/bin/ghc && \
+    chown root:root /usr/local/bin/ghc && \
+    chmod 755 /usr/local/bin/ghc
 
 # Don't use the Setup Wizard
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
