@@ -3,9 +3,39 @@ FROM jenkins/jenkins:latest
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y neovim zsh build-essential libelf-dev && \
-    apt-get clean
+RUN apt-get update &&   \
+    apt-get install -y  \
+    neovim zsh          \
+    build-essential     \
+    libelf-dev          \
+    bash                \
+    curl                \
+    git                 \
+    make                \
+    m4                  \
+    gcc                 \
+    g++                 \
+    ocaml               \
+    ocaml-compiler-libs \
+    opam                \
+    findutils           \
+    binutils-gold       \
+    libc-dev            \
+    libffi-dev          \
+    musl-dev            \
+    ncurses-dev         \
+    perl                \
+    tar                 \
+    && apt-get clean
+
+RUN curl -L https://downloads.haskell.org/~ghcup/x86_64-linux-ghcup -o /usr/bin/ghcup && \
+    chmod +x /usr/bin/ghcup
+
+ENV PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
+
+RUN ghcup install cabal 3.16.0.0 && \
+    ghcup install ghc 9.8.4 && \
+    ghcup set 9.8.4
 
 # Don't use the Setup Wizard
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
