@@ -35,6 +35,7 @@ ENV PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
 RUN ghcup install cabal 3.16.0.0 && \
     ghcup install ghc 9.8.4 && \
+    ghcup install stack && \
     ghcup set 9.8.4
 
 # Don't use the Setup Wizard
